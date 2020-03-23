@@ -24,13 +24,12 @@ function CovidFilter({
   }
 
   return (
-    <div className="list-group CovidFilter">
-      <h2>Covid</h2>
+    <div className="list-group">
       <table className="table table-responsive table-sm">
         <thead>
           <tr>
             <th>Mode</th>
-            <th>
+            <th colSpan="2">
               <select
                 name="type"
                 className="form-control form-control-sm"
@@ -45,7 +44,7 @@ function CovidFilter({
           </tr>
           <tr>
             <th>From</th>
-            <th>
+            <th colSpan="2">
               <div className="input-group">
                 <select
                   name="type"
@@ -54,7 +53,9 @@ function CovidFilter({
                   onChange={onChangeFrom}
                 >
                   {times.map(it => (
-                    <option value={it}>{it}</option>
+                    <option key={it} value={it}>
+                      {it}
+                    </option>
                   ))}
                 </select>
                 <div className="input-group-append">
@@ -74,7 +75,7 @@ function CovidFilter({
           </tr>
           <tr>
             <th>View</th>
-            <th>
+            <th colSpan="2">
               <div className="input-group">
                 <input
                   name="filter"
@@ -108,6 +109,9 @@ function CovidFilter({
                 />
               </th>
               <td>{it.label}</td>
+              <td>
+                <span className="badge badge-danger">{it.last}</span>
+              </td>
             </tr>
           ))}
         </tbody>

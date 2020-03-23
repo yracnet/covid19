@@ -7,6 +7,9 @@ String.prototype.format = function() {
     return typeof args[i] != "undefined" ? args[i++] : "";
   });
 };
+Array.prototype.last = function() {
+  return this[this.length - 1];
+};
 
 const config = {
   timeseries:
@@ -24,18 +27,59 @@ const mapper = {
       .map(it => moment(it))
       .map(it => it.format("YYYY-MM-DD"));
     array = array.slice(1);
+
+    // grupo US y CHINA
+    ["China", "US"].forEach(name => {
+      let result = array
+        .filter(it => it[1] === name)
+        .reduce((a, b) => {
+          let c = [...b];
+          if (a.length === 0) {
+            return c;
+          }
+          c[0] = "SUMATORIA";
+          for (let i = 4; i < b.length; i++) {
+            c[i] = parseInt(c[i]) + parseInt(a[i]);
+          }
+          return c;
+        }, []);
+      array.unshift(result);
+    });
+    //grupo UE
+
+    let result = array
+      .filter(it =>
+        [
+          "Spain",
+          "France",
+          "Italy",
+          "Germany",
+          "Portugal",
+          "Austria",
+          "Belgium",
+          "Netherlands"
+        ].includes(it[1])
+      )
+      .reduce((a, b) => {
+        let c = [...b];
+        if (a.length === 0) {
+          return c;
+        }
+        c[1] = "UE - Parcial";
+        c[0] = "SUMATORIA";
+        for (let i = 4; i < b.length; i++) {
+          c[i] = parseInt(c[i]) + parseInt(a[i]);
+        }
+        return c;
+      }, []);
+    array.unshift(result);
+
     let values = array.map(line => ({
       label: line[1] + (line[0] ? " / " + line[0] : ""),
       checked: false,
+      last: line.last(),
       values: line.slice(4)
     }));
-    //grupo US y CHINA
-    //values.filter(it=>it[1] ==='China').;
-    //let values = array.map(line => ({
-    //  label: line[1] + (line[0] ? " / " + line[0] : ""),
-    //  checked: false,
-    //  values: line.slice(4)
-    //}));
 
     return {
       labels,

@@ -30,22 +30,20 @@ const colors = [
   "#FF6384",
   "#36A2EB",
   "#FFCE56",
+  "#fdfd98",
   "#85a8ba",
-  "#96b6c5",
-  "#adc4ce",
   "#eee0c9",
   "#f1f0e8",
   "#b29dd9",
-  "#fdfd98",
   "#fe6b64",
   "#77dd77",
   "#779ecb",
   "#90c978",
-  "#afd5aa",
   "#83c6dd",
   "#5db1d1",
   "#98e690",
   "#ebceed",
+  "#afd5aa",
   "#d9ffff"
 ];
 
@@ -70,7 +68,6 @@ function CovidGraph({ values, times, from }) {
 
   return (
     <div>
-      <h2>Time Line</h2>
       <Line data={data} />
     </div>
   );

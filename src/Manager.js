@@ -20,6 +20,7 @@ class Manager extends React.Component {
     this.onChangeFrom = this.onChangeFrom.bind(this);
     this.onChangeType = this.onChangeType.bind(this);
     this.onClickReset = this.onClickReset.bind(this);
+    this.reloadGraph = this.reloadGraph.bind(this);
   }
 
   onChangeCheck(event) {
@@ -34,6 +35,7 @@ class Manager extends React.Component {
   onChangeType(event) {
     let type = event.currentTarget.value;
     this.setState({ type });
+    this.reloadGraph();
   }
 
   onChangeFrom(event) {
@@ -63,13 +65,25 @@ class Manager extends React.Component {
     });
   }
   componentDidUpdate() {}
+  reloadGraph() {
+    let state = this.state;
+    fetchTimeLine(state.type, data => {
+      state.times = data.labels;
+      state.countries = data.values;
+      this.setState(state);
+      this.forceUpdate();
+    });
+  }
   render() {
     let { countries, type, times, from } = this.state;
     return (
-      <div className="container">
-        <h1>Show Graph COVID-19</h1>
+      <div className="container-fluid">
+        <h3>COVID-19 TimeLine</h3>
         <div className="row">
-          <div className="col-4">
+          <div className="col-12 col-sm-12 col-md-12 col-lg-9 col-xl-10">
+            <CovidGraph values={countries} times={times} from={from} />
+          </div>
+          <div className="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2">
             <CovidFilter
               countries={countries}
               times={times}
@@ -80,9 +94,6 @@ class Manager extends React.Component {
               onChangeFrom={this.onChangeFrom}
               onClickReset={this.onClickReset}
             />
-          </div>
-          <div className="col-8">
-            <CovidGraph values={countries} times={times} from={from} />
           </div>
         </div>
       </div>
