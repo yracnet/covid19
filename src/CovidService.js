@@ -23,12 +23,19 @@ const mapper = {
       .map(it => new Date(it))
       .map(it => moment(it))
       .map(it => it.format("YYYY-MM-DD"));
-    let values = array.slice(1);
-    values = values.map(line => ({
+    array = array.slice(1);
+    let values = array.map(line => ({
       label: line[1] + (line[0] ? " / " + line[0] : ""),
       checked: false,
       values: line.slice(4)
     }));
+    //grupo US y CHINA
+    //values.filter(it=>it[1] ==='China').;
+    //let values = array.map(line => ({
+    //  label: line[1] + (line[0] ? " / " + line[0] : ""),
+    //  checked: false,
+    //  values: line.slice(4)
+    //}));
 
     return {
       labels,

@@ -9,7 +9,7 @@ class Manager extends React.Component {
     super(props);
     this.state = {
       type: "Confirmed",
-      from: "2020-03-10",
+      from: "2020-01-01",
       times: ["01", "02", "03", "04", "05"],
       countries: [
         { label: "line 1", checked: true, values: [5, 15, 2, 30, 5] },
@@ -51,9 +51,14 @@ class Manager extends React.Component {
   componentDidMount() {
     let state = this.state;
     fetchTimeLine(state.type, data => {
-      console.log("-->", data);
       state.times = data.labels;
       state.countries = data.values;
+      state.from = "2020-03-10";
+      state.countries
+        .filter(it => it.label === "Bolivia")
+        .forEach(it => {
+          it.checked = true;
+        });
       this.setState(state);
     });
   }

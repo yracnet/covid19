@@ -26,6 +26,29 @@ import { Line } from "react-chartjs-2";
 //    }
 //  ]
 //};
+const colors = [
+  "#FF6384",
+  "#36A2EB",
+  "#FFCE56",
+  "#85a8ba",
+  "#96b6c5",
+  "#adc4ce",
+  "#eee0c9",
+  "#f1f0e8",
+  "#b29dd9",
+  "#fdfd98",
+  "#fe6b64",
+  "#77dd77",
+  "#779ecb",
+  "#90c978",
+  "#afd5aa",
+  "#83c6dd",
+  "#5db1d1",
+  "#98e690",
+  "#ebceed",
+  "#d9ffff"
+];
+
 function CovidGraph({ values, times, from }) {
   let start = 0;
   if (from) {
@@ -37,9 +60,12 @@ function CovidGraph({ values, times, from }) {
   };
   data.datasets = values
     .filter(it => it.checked)
-    .map(it => ({
+    .map((it, i) => ({
       label: it.label,
-      data: it.values.slice(start)
+      data: it.values.slice(start),
+      fill: false,
+      borderColor: colors[i % colors.length],
+      backgroundColor: colors[i % colors.length]
     }));
 
   return (
