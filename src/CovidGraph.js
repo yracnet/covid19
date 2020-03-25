@@ -1,6 +1,6 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
-import { createProyections } from "./CovidService";
+import { createLinealProyections } from "./CovidService";
 //const data = {
 //  labels: ["January", "February", "March", "April", "May", "June", "July"],
 //  datasets: [
@@ -52,7 +52,6 @@ const colors2 = [
 ];
 
 function CovidGraph({ values, times, from }) {
-  let size = 4;
   let start = 0;
   if (from) {
     start = times.indexOf(from);
@@ -70,18 +69,17 @@ function CovidGraph({ values, times, from }) {
       borderColor: colors1[i % colors1.length],
       backgroundColor: colors1[i % colors1.length]
     }));
-  /*
   values
     .filter(it => it.checked)
     .filter(it => it.proyections)
     .map((it, i) => {
       if (it.proyections.length === 0) {
-        it.proyections = createProyections(it.values);
+        it.proyections = createLinealProyections(it.values);
       }
       return it;
     })
     .map((it, i) => ({
-      label: it.label + "Proyection",
+      label: it.label + " Lineal Proyection",
       data: it.proyections.slice(start),
       fill: false,
       borderDash: [10, 5],
@@ -91,7 +89,6 @@ function CovidGraph({ values, times, from }) {
     .forEach(it => {
       data.datasets.push(it);
     });
-  /**/
   return (
     <div>
       <Line data={data} />

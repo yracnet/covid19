@@ -12,7 +12,7 @@ Array.prototype.last = function() {
 };
 
 const config = {
-  days: 3,
+  days: 8,
   timeseries:
     "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_{}_global.csv"
 };
@@ -113,15 +113,19 @@ let fetchTimeLine = function(type, success, error) {
     .catch(error);
 };
 
-let createProyections = function(values) {
+let createLinealProyections = function(values) {
   let result = values.map(it => it);
-  let index = result.length - config.days;
-  let last = result.last();
-  for (let i = 0; i < config.days; i++) {
-    let diff = result[index + i] - result[index + i - 1];
-    last = last + diff;
-    result.push(last);
+  let init = result.length - config.days;
+  let averange = 0;
+  for (let i = init; i < result.length; i++) {
+    let diff = result[i] - result[i - 1];
+    averange = averange + diff;
+  }
+  averange = averange / config.days;
+  let end = result.length + config.days;
+  for (let i = result.length; i < end; i++) {
+    result[i] = result[i - 1] + averange;
   }
   return result;
 };
-export { fetchTimeLine, createProyections };
+export { fetchTimeLine, createLinealProyections };
