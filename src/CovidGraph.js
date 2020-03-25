@@ -1,5 +1,6 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
+import { createProyections } from "./CovidService";
 //const data = {
 //  labels: ["January", "February", "March", "April", "May", "June", "July"],
 //  datasets: [
@@ -26,7 +27,7 @@ import { Line } from "react-chartjs-2";
 //    }
 //  ]
 //};
-const colors = [
+const colors1 = [
   "#FF6384",
   "#36A2EB",
   "#FFCE56",
@@ -35,7 +36,10 @@ const colors = [
   "#eee0c9",
   "#f1f0e8",
   "#b29dd9",
-  "#fe6b64",
+  "#fe6b64"
+];
+
+const colors2 = [
   "#77dd77",
   "#779ecb",
   "#90c978",
@@ -48,6 +52,7 @@ const colors = [
 ];
 
 function CovidGraph({ values, times, from }) {
+  let size = 4;
   let start = 0;
   if (from) {
     start = times.indexOf(from);
@@ -62,10 +67,31 @@ function CovidGraph({ values, times, from }) {
       label: it.label,
       data: it.values.slice(start),
       fill: false,
-      borderColor: colors[i % colors.length],
-      backgroundColor: colors[i % colors.length]
+      borderColor: colors1[i % colors1.length],
+      backgroundColor: colors1[i % colors1.length]
     }));
-
+  /*
+  values
+    .filter(it => it.checked)
+    .filter(it => it.proyections)
+    .map((it, i) => {
+      if (it.proyections.length === 0) {
+        it.proyections = createProyections(it.values);
+      }
+      return it;
+    })
+    .map((it, i) => ({
+      label: it.label + "Proyection",
+      data: it.proyections.slice(start),
+      fill: false,
+      borderDash: [10, 5],
+      borderColor: colors2[i % colors2.length],
+      backgroundColor: colors2[i % colors2.length]
+    }))
+    .forEach(it => {
+      data.datasets.push(it);
+    });
+  /**/
   return (
     <div>
       <Line data={data} />

@@ -12,8 +12,9 @@ Array.prototype.last = function() {
 };
 
 const config = {
+  days: 3,
   timeseries:
-    "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-{}.csv"
+    "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_{}_global.csv"
 };
 
 const mapper = {
@@ -26,6 +27,11 @@ const mapper = {
       .map(it => new Date(it))
       .map(it => moment(it))
       .map(it => it.format("YYYY-MM-DD"));
+    let last = moment(new Date(array[0].last()));
+    for (let i = 0; i < config.days; i++) {
+      last = last.add(1, "days");
+      labels.push(last.format("YYYY-MM-DD"));
+    }
     array = array.slice(1);
 
     // grupo US y CHINA
@@ -78,7 +84,8 @@ const mapper = {
       label: line[1] + (line[0] ? " / " + line[0] : ""),
       checked: false,
       last: line.last(),
-      values: line.slice(4)
+      values: line.slice(4).map(it => parseInt(it)),
+      proyections: []
     }));
 
     return {
@@ -105,11 +112,16 @@ let fetchTimeLine = function(type, success, error) {
     .then(success)
     .catch(error);
 };
-//let data = {
-//  confirmed: service.getTimeLineModel("Confirmed"),
-//  deaths: service.getTimeLineModel("Deaths"),
-//  recovered: service.getTimeLineModel("Recovered")
-//};
-//console.log("data:::::::::::", data);
 
-export { fetchTimeLine };
+let createProyections = function(values) {
+  let result = values.map(it => it);
+  let index = result.length - config.days;
+  let last = result.last();
+  for (let i = 0; i < config.days; i++) {
+    let diff = result[index + i] - result[index + i - 1];
+    last = last + diff;
+    result.push(last);
+  }
+  return result;
+};
+export { fetchTimeLine, createProyections };

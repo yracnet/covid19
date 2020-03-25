@@ -8,12 +8,22 @@ class Manager extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: "Confirmed",
+      type: "confirmed",
       from: "2020-01-01",
       times: ["01", "02", "03", "04", "05"],
       countries: [
-        { label: "line 1", checked: true, values: [5, 15, 2, 30, 5] },
-        { label: "line 2", checked: true, values: [50, 5, 20, 30, 50] }
+        {
+          label: "line 1",
+          checked: true,
+          values: [5, 15, 2, 30, 5],
+          proyections: [0, 0, 10, 20, 30]
+        },
+        {
+          label: "line 2",
+          checked: true,
+          values: [50, 5, 20, 30, 50],
+          proyections: [0, 0, 10, 20, 30]
+        }
       ]
     };
     this.onChangeCheck = this.onChangeCheck.bind(this);
@@ -61,6 +71,7 @@ class Manager extends React.Component {
         .forEach(it => {
           it.checked = true;
         });
+      console.log("-->", state);
       this.setState(state);
     });
   }

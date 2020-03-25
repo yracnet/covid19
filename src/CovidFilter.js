@@ -36,9 +36,8 @@ function CovidFilter({
                 defaultValue={type}
                 onChange={onChangeType}
               >
-                <option value="Confirmed">Confirmed</option>
-                <option value="Deaths">Deaths</option>
-                <option value="Recovered">Recovered</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="deaths">Deaths</option>
               </select>
             </th>
           </tr>
@@ -52,8 +51,8 @@ function CovidFilter({
                   value={from}
                   onChange={onChangeFrom}
                 >
-                  {times.map(it => (
-                    <option key={it} value={it}>
+                  {times.map((it, index) => (
+                    <option key={index} value={it}>
                       {it}
                     </option>
                   ))}
@@ -99,7 +98,7 @@ function CovidFilter({
         </thead>
         <tbody>
           {filterCountries.map((it, index) => (
-            <tr key={it.label}>
+            <tr key={index}>
               <th>
                 <input
                   name={it.label}
