@@ -8,8 +8,11 @@ class Manager extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: "confirmed",
-      from: "2020-01-01",
+      config: {
+        type: "confirmed",
+        from: "2020-01-01",
+        to: "2020-03-30"
+      },
       times: ["01", "02", "03", "04", "05"],
       countries: [
         {
@@ -27,10 +30,20 @@ class Manager extends React.Component {
       ]
     };
     this.onChangeCheck = this.onChangeCheck.bind(this);
-    this.onChangeFrom = this.onChangeFrom.bind(this);
-    this.onChangeType = this.onChangeType.bind(this);
+    this.onChangeConfig = this.onChangeConfig.bind(this);
     this.onClickReset = this.onClickReset.bind(this);
     this.reloadGraph = this.reloadGraph.bind(this);
+  }
+
+  onChangeConfig(event) {
+    let { value, name } = event.currentTarget;
+    let { config } = this.state;
+    config[name] = value;
+    this.setState({ config });
+    console.log("config", config);
+    if (name === "type") {
+      this.reloadGraph();
+    }
   }
 
   onChangeCheck(event) {
@@ -42,17 +55,6 @@ class Manager extends React.Component {
     this.setState({ countries });
   }
 
-  onChangeType(event) {
-    let type = event.currentTarget.value;
-    this.setState({ type });
-    this.reloadGraph();
-  }
-
-  onChangeFrom(event) {
-    let from = event.currentTarget.value;
-    this.setState({ from });
-  }
-
   onClickReset() {
     let { countries } = this.state;
     countries.forEach(it => {
@@ -62,10 +64,11 @@ class Manager extends React.Component {
   }
   componentDidMount() {
     let state = this.state;
-    fetchTimeLine(state.type, data => {
+    fetchTimeLine(state.config.type, data => {
       state.times = data.labels;
       state.countries = data.values;
-      state.from = "2020-03-10";
+      state.config.from = "2020-03-10";
+      state.config.to = state.times.last(22);
       state.countries
         .filter(it => it.label === "Bolivia")
         .forEach(it => {
@@ -78,7 +81,7 @@ class Manager extends React.Component {
   componentDidUpdate() {}
   reloadGraph() {
     let state = this.state;
-    fetchTimeLine(state.type, data => {
+    fetchTimeLine(state.config.type, data => {
       state.times = data.labels;
       state.countries = data.values;
       this.setState(state);
@@ -86,23 +89,26 @@ class Manager extends React.Component {
     });
   }
   render() {
-    let { countries, type, times, from } = this.state;
+    let { countries, config, times } = this.state;
     return (
       <div className="container-fluid">
         <h3>COVID-19 TimeLine</h3>
         <div className="row">
           <div className="col-12 col-sm-12 col-md-12 col-lg-9 col-xl-10">
-            <CovidGraph values={countries} times={times} from={from} />
+            <CovidGraph
+              values={countries}
+              times={times}
+              from={config.from}
+              to={config.to}
+            />
           </div>
           <div className="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2">
             <CovidFilter
               countries={countries}
               times={times}
-              type={type}
-              from={from}
+              config={config}
+              onChangeConfig={this.onChangeConfig}
               onChangeCheck={this.onChangeCheck}
-              onChangeType={this.onChangeType}
-              onChangeFrom={this.onChangeFrom}
               onClickReset={this.onClickReset}
             />
           </div>

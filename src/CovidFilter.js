@@ -3,11 +3,9 @@ import React, { useState } from "react";
 function CovidFilter({
   countries,
   times,
-  type,
-  from,
-  onChangeFrom,
+  config,
+  onChangeConfig,
   onChangeCheck,
-  onChangeType,
   onClickReset
 }) {
   let [filter, setFilter] = useState("");
@@ -33,8 +31,8 @@ function CovidFilter({
               <select
                 name="type"
                 className="form-control form-control-sm"
-                defaultValue={type}
-                onChange={onChangeType}
+                defaultValue={config.type}
+                onChange={onChangeConfig}
               >
                 <option value="confirmed">Confirmed</option>
                 <option value="deaths">Deaths</option>
@@ -46,10 +44,10 @@ function CovidFilter({
             <th colSpan="2">
               <div className="input-group">
                 <select
-                  name="type"
+                  name="from"
                   className="form-control form-control-sm"
-                  value={from}
-                  onChange={onChangeFrom}
+                  value={config.from}
+                  onChange={onChangeConfig}
                 >
                   {times.map((it, index) => (
                     <option key={index} value={it}>
@@ -59,11 +57,44 @@ function CovidFilter({
                 </select>
                 <div className="input-group-append">
                   <button
+                    name="from"
                     className="btn btn-sm btn-danger"
                     type="button"
                     onClick={e => {
                       e.currentTarget.value = times[0];
-                      onChangeFrom(e);
+                      onChangeConfig(e);
+                    }}
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <th>To</th>
+            <th colSpan="2">
+              <div className="input-group">
+                <select
+                  name="to"
+                  className="form-control form-control-sm"
+                  value={config.to}
+                  onChange={onChangeConfig}
+                >
+                  {times.map((it, index) => (
+                    <option key={index} value={it}>
+                      {it}
+                    </option>
+                  ))}
+                </select>
+                <div className="input-group-append">
+                  <button
+                    name="to"
+                    className="btn btn-sm btn-danger"
+                    type="button"
+                    onClick={e => {
+                      e.currentTarget.value = times.last();
+                      onChangeConfig(e);
                     }}
                   >
                     Clear
