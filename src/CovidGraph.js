@@ -146,7 +146,15 @@ function CovidGraph({ values, times, from, to }) {
         mapper.createDataset("", it, i, "increment", start, end, "bar")
       );
       data.datasets.push(
-        mapper.createDataset("", it, i, "timeline", start, end)
+        mapper.createDataset(
+          "        ",
+          it,
+          i,
+          "timeline",
+          start,
+          end,
+          "bubble"
+        )
       );
       data.datasets.push(
         mapper.createDataset(
@@ -156,7 +164,7 @@ function CovidGraph({ values, times, from, to }) {
           "timeline1",
           start,
           end,
-          "bubble"
+          "line"
         )
       );
       data.datasets.push(
@@ -167,7 +175,7 @@ function CovidGraph({ values, times, from, to }) {
           "timeline2",
           start,
           end,
-          "bubble"
+          "line"
         )
       );
       data.datasets.push(
@@ -178,7 +186,7 @@ function CovidGraph({ values, times, from, to }) {
           "timeline3",
           start,
           end,
-          "bubble"
+          "line"
         )
       );
     });
