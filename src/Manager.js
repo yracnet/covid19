@@ -18,14 +18,14 @@ class Manager extends React.Component {
         {
           label: "line 1",
           checked: true,
-          values: [5, 15, 2, 30, 5],
-          proyections: [0, 0, 10, 20, 30]
+          timeline: [5, 15, 2, 30, 5],
+          increment: [0, 0, 10, 20, 30]
         },
         {
           label: "line 2",
           checked: true,
-          values: [50, 5, 20, 30, 50],
-          proyections: [0, 0, 10, 20, 30]
+          timeline: [50, 5, 20, 30, 50],
+          increment: [0, 0, 10, 20, 30]
         }
       ]
     };

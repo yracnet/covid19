@@ -81,13 +81,20 @@ const mapper = {
       }, []);
     array.unshift(result);
 
-    let values = array.map(line => ({
-      label: line[1] + (line[0] ? " / " + line[0] : ""),
-      checked: false,
-      last: line.last(),
-      values: line.slice(4).map(it => parseInt(it)),
-      proyections: []
-    }));
+    let values = array
+      .map(line => ({
+        label: line[1] + (line[0] ? " / " + line[0] : ""),
+        checked: false,
+        last: line.last(),
+        timeline: line.slice(4).map(it => parseInt(it))
+      }))
+      .map(it => {
+        let increment = it.timeline;
+        it.increment = increment.map((it, i) =>
+          i !== 0 ? it - increment[i - 1] : 0
+        );
+        return it;
+      });
 
     return {
       labels,

@@ -1,5 +1,5 @@
 import React from "react";
-import { Line } from "react-chartjs-2";
+import { Line, Radar } from "react-chartjs-2";
 import {
   createWeekRegression,
   createLinearRegression,
@@ -45,12 +45,13 @@ const colors = [
 
 let mapper = {
   createNewList: function(it, attr, fnList) {
+    console.log("***", it);
     if (!it[attr] || it[attr].length === 0) {
-      it[attr] = fnList(it.values);
+      it[attr] = fnList(it.timeline);
     }
     return it;
   },
-  createDataset: function(title, it, i, attr, start, end) {
+  createDataset: function(title, it, i, attr, start, end, type) {
     let values = it[attr];
     if (!values) {
       values = [];
@@ -67,7 +68,8 @@ let mapper = {
       borderDash: sw ? [5, 5] : [],
       borderWidth: sw ? 2 : 3,
       borderColor: colors[i % colors.length],
-      backgroundColor: colors[i % colors.length]
+      backgroundColor: colors[i % colors.length],
+      type: type
     };
   },
   slice: function(it, start) {
@@ -87,35 +89,103 @@ function CovidGraph({ values, times, from, to }) {
   if (to) {
     end = times.indexOf(to);
   }
-  console.log("-->", times, start, end);
-
   let data = {
+    labels: times.slice(start, end),
+    datasets: []
+  };
+  let dataRadar = {
     labels: times.slice(start, end),
     datasets: []
   };
   values
     .filter(it => it.checked)
     .map(it => {
-      it = mapper.createNewList(it, "linear", createWeekRegression);
-      it = mapper.createNewList(it, "linearA", createLinearRegression);
-      it = mapper.createNewList(it, "linearB", createExponentialRegression);
+      it = mapper.createNewList(it, "timeline1", createWeekRegression);
+      it = mapper.createNewList(it, "timeline2", createLinearRegression);
+      it = mapper.createNewList(it, "timeline3", createExponentialRegression);
       return it;
     })
     .forEach((it, i) => {
-      data.datasets.push(mapper.createDataset("", it, i, "values", start, end));
-      data.datasets.push(
-        mapper.createDataset("-Week", it, 10 + i, "linear", start, end)
+      dataRadar.datasets.push(
+        mapper.createDataset("", it, i, "timeline", start, end, "radar")
+      );
+      dataRadar.datasets.push(
+        mapper.createDataset(
+          "-Week",
+          it,
+          10 + i,
+          "timeline1",
+          start,
+          end,
+          "radar"
+        )
+      );
+      dataRadar.datasets.push(
+        mapper.createDataset(
+          "-Linear",
+          it,
+          20 + i,
+          "timeline2",
+          start,
+          end,
+          "radar"
+        )
+      );
+      dataRadar.datasets.push(
+        mapper.createDataset(
+          "-Expo",
+          it,
+          30 + i,
+          "timeline3",
+          start,
+          end,
+          "radar"
+        )
       );
       data.datasets.push(
-        mapper.createDataset("-Linear", it, 20 + i, "linearA", start, end)
+        mapper.createDataset("", it, i, "increment", start, end, "bar")
       );
       data.datasets.push(
-        mapper.createDataset("-Exponential", it, 30 + i, "linearB", start, end)
+        mapper.createDataset("", it, i, "timeline", start, end)
+      );
+      data.datasets.push(
+        mapper.createDataset(
+          "-Week",
+          it,
+          10 + i,
+          "timeline1",
+          start,
+          end,
+          "bubble"
+        )
+      );
+      data.datasets.push(
+        mapper.createDataset(
+          "-Linear",
+          it,
+          20 + i,
+          "timeline2",
+          start,
+          end,
+          "bubble"
+        )
+      );
+      data.datasets.push(
+        mapper.createDataset(
+          "-Expo",
+          it,
+          30 + i,
+          "timeline3",
+          start,
+          end,
+          "bubble"
+        )
       );
     });
   return (
     <div>
       <Line data={data} />
+      <Radar data={dataRadar} />
     </div>
   );
 }
