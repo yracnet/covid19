@@ -4,7 +4,7 @@
 
 [Time Line Bolivia](https://yracnet.github.io/covid19/build/)
 
-![Time Line Bolivia](public/graph.png "Time Line Bolivia")
+![Time Line Bolivia](public/graph.png "Time Line COVID-19 Bolivia")
 
 ## Time Line COVID19
 
