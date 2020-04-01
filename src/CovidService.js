@@ -143,6 +143,7 @@ let createWeekRegression = function(values) {
     result[index - i] = point - averange * i;
     result[index + i] = point + averange * i;
   }
+  result = result.map(it => (it < 0 ? undefined : it));
   return result;
 };
 
@@ -166,6 +167,7 @@ let createRegression = function(values, init, fnRegression) {
     result[index + i] = regression.predict(x + i);
     result[index - i] = regression.predict(x - i);
   }
+  result = result.map(it => (it < 0 ? undefined : it));
   return result;
 };
 
